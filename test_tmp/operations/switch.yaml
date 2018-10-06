@@ -1,0 +1,13 @@
+description: 'Handle an item depending on a select value.'
+in:
+  type: map
+  map:
+    item:
+      type: generic
+      generic: in
+    select:
+      type: generic
+      generic: select
+out:
+  type: generic
+  generic: out

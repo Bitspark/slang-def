@@ -1,0 +1,8 @@
+description: 'A wrapper which annotates an arbitrary type with a valid flag.'
+type: 'map'
+map:
+  item:
+    type: 'generic'
+    generic: 'item'
+  valid:
+    type: 'boolean'

@@ -1,0 +1,7 @@
+description: 'Email structure.'
+type: map
+map:
+  local:
+    type: string
+  domain:
+    type: string

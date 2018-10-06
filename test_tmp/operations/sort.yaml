@@ -1,0 +1,11 @@
+description: 'Compares two items and returns a boolean indicating their relative order. True means that a comes before b.'
+in:
+  type: stream
+  stream:
+    type: generic
+    generic: item
+out:
+  type: stream
+  stream:
+    type: generic
+    generic: item

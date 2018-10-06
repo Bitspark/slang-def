@@ -1,0 +1,10 @@
+description: 'A basic user type for testing purposes'
+type: 'map'
+map:
+  lastName:
+    type: 'string'
+  firstName:
+    type: 'string'
+  email:
+    type: 'reference'
+    reference: 'email'

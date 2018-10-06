@@ -1,0 +1,7 @@
+operation: switch
+properties:
+  cases:
+    type: stream
+    stream:
+      type: generic
+      generic: select

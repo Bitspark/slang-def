@@ -1,0 +1,7 @@
+description: 'A specification of the validated wrapper to carry a user.'
+type: 'reference'
+reference: 'validated'
+generics:
+  item:
+    type: 'reference'
+    reference: 'user'
