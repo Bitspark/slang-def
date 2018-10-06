@@ -36,12 +36,12 @@ func (o Operation) Resolve(operationProvider OperationProvider, typeProvider Typ
 			return Operation{}, err
 		}
 
-		ref.In, err = ref.In.Resolve(typeProvider, ref.Generics)
+		ref.In, err = ref.In.Resolve(typeProvider, o.Generics)
 		if err != nil {
 			return Operation{}, err
 		}
 
-		ref.Out, err = ref.Out.Resolve(typeProvider, ref.Generics)
+		ref.Out, err = ref.Out.Resolve(typeProvider, o.Generics)
 		if err != nil {
 			return Operation{}, err
 		}
