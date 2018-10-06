@@ -43,13 +43,18 @@ func createTestTypeProvider(allowedTypes []string) testTypeProvider {
 type testOperationProvider struct {
 }
 
-func (t testOperationProvider) get(reference string) (Operation, error) {
+func (t testOperationProvider) getOperation(reference string) (Operation, error) {
 	typeYAMLBytes, err := ioutil.ReadFile(filepath.Join("test_tmp", "operations", reference+".yaml"))
 
 	to := Operation{}
 	yaml.Unmarshal(typeYAMLBytes, &to)
 
 	return to, err
+}
+
+func createTestOperationProvider() testOperationProvider {
+	op := testOperationProvider{}
+	return op
 }
 
 // RESOURCE

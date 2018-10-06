@@ -1,0 +1,6 @@
+description: Validate an email
+in:
+  type: reference
+  reference: email
+out:
+  type: boolean

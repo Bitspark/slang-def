@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestProviderWorks(t *testing.T) {
+func TestType_ProviderWorks(t *testing.T) {
 	a := assert.New(t)
 	tp := createTestTypeProvider([]string{})
 
@@ -14,7 +14,7 @@ func TestProviderWorks(t *testing.T) {
 	a.Equal("map", tt.Type)
 }
 
-func TestGoodResolve(t *testing.T) {
+func TestType_GoodResolve(t *testing.T) {
 	a := assert.New(t)
 	tp := createTestTypeProvider([]string{"goodType"})
 
@@ -23,7 +23,7 @@ func TestGoodResolve(t *testing.T) {
 	a.Equal("goodType", tr.Type)
 }
 
-func TestBadResolve(t *testing.T) {
+func TestType_BadResolve(t *testing.T) {
 	a := assert.New(t)
 	tp := createTestTypeProvider([]string{})
 
@@ -32,7 +32,7 @@ func TestBadResolve(t *testing.T) {
 	a.Equal("", tr.Type)
 }
 
-func TestGenerics(t *testing.T) {
+func TestType_Generics(t *testing.T) {
 	a := assert.New(t)
 	tp := createTestTypeProvider([]string{"boolean"})
 
@@ -48,7 +48,7 @@ func TestGenerics(t *testing.T) {
 	a.Equal("coolType", tt.Map["item"].Type)
 }
 
-func TestReferenceGenerics(t *testing.T) {
+func TestType_ReferenceGenerics(t *testing.T) {
 	a := assert.New(t)
 	tp := createTestTypeProvider([]string{"boolean", "string"})
 

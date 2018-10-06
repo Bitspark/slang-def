@@ -42,14 +42,14 @@ type Type struct {
 }
 
 // Resolves the type using the given provider.
-func (t Type) Resolve(provider TypeProvider, generics Generics) (Type, error) {
+func (t Type) Resolve(typeProvider TypeProvider, generics Generics) (Type, error) {
 	resolved := Type{
 		Description: t.Description,
 		Type:        t.Type,
 	}
 
 	if t.Type == "stream" {
-		resolvedStream, err := t.Stream.Resolve(provider, generics)
+		resolvedStream, err := t.Stream.Resolve(typeProvider, generics)
 		if err != nil {
 			return Type{}, err
 		}
@@ -57,7 +57,7 @@ func (t Type) Resolve(provider TypeProvider, generics Generics) (Type, error) {
 	} else if t.Type == "map" {
 		resolvedMap := make(map[string]*Type)
 		for sub, subtype := range t.Map {
-			resolvedSubtype, err := subtype.Resolve(provider, generics)
+			resolvedSubtype, err := subtype.Resolve(typeProvider, generics)
 			if err != nil {
 				return Type{}, err
 			}
@@ -71,25 +71,25 @@ func (t Type) Resolve(provider TypeProvider, generics Generics) (Type, error) {
 		}
 		resolved = *gen
 	} else if t.Type == "reference" {
-		ref, err := provider.getReference(t.Reference)
+		ref, err := typeProvider.getReference(t.Reference)
 		if err != nil {
 			return Type{}, err
 		}
 		refGens := make(Generics)
 		for gen, genType := range t.Generics {
-			resolvedGen, err := genType.Resolve(provider, generics)
+			resolvedGen, err := genType.Resolve(typeProvider, generics)
 			if err != nil {
 				return Type{}, err
 			}
 			refGens[gen] = &resolvedGen
 		}
-		resolved, err = ref.Resolve(provider, refGens)
+		resolved, err = ref.Resolve(typeProvider, refGens)
 		if err != nil {
 			return Type{}, err
 		}
 	} else {
 		var err error
-		resolved, err = provider.getType(t.Type)
+		resolved, err = typeProvider.getType(t.Type)
 		if err != nil {
 			return Type{}, err
 		}
