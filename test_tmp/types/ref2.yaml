@@ -1,0 +1,11 @@
+type: map
+map:
+  a:
+    type: reference
+    reference: ref1
+    generics:
+      type1:
+        type: string
+      type2:
+        type: generic
+        generic: type2

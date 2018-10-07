@@ -1,0 +1,8 @@
+type: map
+map:
+  a:
+    type: generic
+    generic: type1
+  b:
+    type: generic
+    generic: type2

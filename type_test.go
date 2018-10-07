@@ -9,7 +9,7 @@ func TestType_ProviderWorks(t *testing.T) {
 	a := assert.New(t)
 	tp := createTestTypeProvider([]string{})
 
-	tt, err := tp.getReference("user")
+	tt, err := tp.getTypeRef("user")
 	a.NoError(err)
 	a.Equal("map", tt.Type)
 }
@@ -36,7 +36,7 @@ func TestType_Generics(t *testing.T) {
 	a := assert.New(t)
 	tp := createTestTypeProvider([]string{"boolean"})
 
-	tt, err := tp.getReference("validated")
+	tt, err := tp.getTypeRef("validated")
 	a.NoError(err)
 
 	generics := make(map[string]*Type)
@@ -52,7 +52,7 @@ func TestType_ReferenceGenerics(t *testing.T) {
 	a := assert.New(t)
 	tp := createTestTypeProvider([]string{"boolean", "string"})
 
-	tt, err := tp.getReference("validatedUser")
+	tt, err := tp.getTypeRef("validatedUser")
 	a.NoError(err)
 
 	tt, err = tt.Resolve(tp, nil)
@@ -60,4 +60,23 @@ func TestType_ReferenceGenerics(t *testing.T) {
 
 	a.Equal("map", tt.Map["item"].Type)
 	a.Equal("string", tt.Map["item"].Map["firstName"].Type)
+}
+
+func TestType_InlineSpec(t *testing.T) {
+	a := assert.New(t)
+	tp := createTestTypeProvider([]string{"boolean", "string", "number"})
+
+	ti1, err := tp.getTypeRef("inlineSpecRef")
+	a.NoError(err)
+
+	ti2, err := tp.getTypeRef("expectedInlineSpec")
+	a.NoError(err)
+
+	generics := make(map[string]*Type)
+	generics["type2"] = &Type{Type: "coolType"}
+
+	ti1, err = ti1.Resolve(tp, generics)
+	a.NoError(err)
+
+	a.Equal(ti2, ti1)
 }

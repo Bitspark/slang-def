@@ -1,0 +1,13 @@
+description: This example shows the possibility of inline-nesting
+resources:
+  fs:
+    reference: filesystem
+operators:
+  getWeather1:
+    operation: jm9e.getWeather@slang.cloud
+    hosts:
+      - 94p.954id.qdaljy.dpi4yng0.slangnet.com
+      - eyu.4dk5o.1ifua78.anbhzy0.slangnet.com
+      - 1d93.e1g7.1nqwl02.6igtsie1.slangnet.com
+      - pld.6d10o.7vtbf1.860iq3en.slangnet.com
+      - uep.1r6qs.cmghfg.65b2xjeu.slangnet.com

@@ -1,0 +1,9 @@
+type: reference
+reference: inlineSpec
+generics:
+  type1:
+    type: string
+  type2:
+    type: number
+  type3:
+    type: boolean

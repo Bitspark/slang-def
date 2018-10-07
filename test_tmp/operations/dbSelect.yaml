@@ -1,0 +1,5 @@
+in:
+  type: number
+out:
+  type: generic
+  generic: item

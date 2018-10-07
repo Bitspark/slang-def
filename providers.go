@@ -1,22 +1,23 @@
 package def
 
-// An OperationProvider provides operation definitions.
-type OperationProvider interface {
-	getOperation(reference string) (Operation, error)
-}
-
 // A TypeProvider provides type definitions.
 type TypeProvider interface {
+	getTypeRef(reference string) (Type, error)
 	getType(name string) (Type, error)
-	getReference(reference string) (Type, error)
+}
+
+// An OperationProvider provides operation definitions.
+type OperationProvider interface {
+	getOperationRef(reference string) (Operation, error)
 }
 
 // A ResourceProvider provides resource definitions.
 type ResourceProvider interface {
-	getResource(reference string) (Resource, error)
+	getResourceRef(reference string) (Resource, error)
 }
 
 // An OperatorProvider provides operator definitions.
 type OperatorProvider interface {
+	getOperatorRef(reference string) (Operator, error)
 	getOperator(reference string, generics Generics, values Values, embedding Embedding) (Operator, error)
 }

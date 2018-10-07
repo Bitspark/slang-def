@@ -1,0 +1,11 @@
+description: Write a file
+in:
+  type: map
+  map:
+    filename:
+      type: string
+    content:
+      type: string
+out:
+  description: Success
+  type: boolean

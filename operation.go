@@ -4,7 +4,8 @@ type Properties map[string]*Type
 
 // An operation defines an interface and has a description of its semantics in natural language (English).
 type Operation struct {
-	/* === REFERENCE === */
+
+	/* === REFERENCE + SPECIFICATION === */
 
 	// Reference specifies a named operation.
 	Reference string `json:"reference,omitempty" yaml:"reference,omitempty"`
@@ -22,6 +23,7 @@ type Operation struct {
 
 	// Out is the definition of the structure of the data this operation returns
 	Out Type `json:"out,omitempty" yaml:"out,omitempty"`
+
 }
 
 // Resolves the type using the given provider.
@@ -31,22 +33,23 @@ func (o Operation) Resolve(operationProvider OperationProvider, typeProvider Typ
 
 	if o.Reference != "" {
 		var ref Operation
-		ref, err = operationProvider.getOperation(o.Reference)
+		ref, err = operationProvider.getOperationRef(o.Reference)
 		if err != nil {
 			return Operation{}, err
 		}
-
-		ref.In, err = ref.In.Resolve(typeProvider, o.Generics)
+		refGens := make(Generics)
+		for gen, genType := range o.Generics {
+			resolvedGen, err := genType.Resolve(typeProvider, generics)
+			if err != nil {
+				return Operation{}, err
+			}
+			refGens[gen] = &resolvedGen
+		}
+		resolved, err = ref.Resolve(operationProvider, typeProvider, refGens)
 		if err != nil {
 			return Operation{}, err
 		}
-
-		ref.Out, err = ref.Out.Resolve(typeProvider, o.Generics)
-		if err != nil {
-			return Operation{}, err
-		}
-
-		resolved = ref
+		return resolved, nil
 	}
 
 	resolved.In, err = resolved.In.Resolve(typeProvider, generics)

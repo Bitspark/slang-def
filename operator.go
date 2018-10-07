@@ -8,7 +8,8 @@ type Connections map[string][]string
 
 // An operator is a net of instances defined by a set of instances and connections.
 type Operator struct {
-	/* === REFERENCE === */
+
+	/* === REFERENCE + SPECIFICATION === */
 
 	// Reference is a reference to the implementation of this operator.
 	// If it is provided, Operators and Connections must not be specified.
@@ -25,6 +26,9 @@ type Operator struct {
 
 	/* === DEFINITION === */
 
+	// Description of the implementation in this operator
+	Description string `json:"description,omitempty" yaml:"description,omitempty"`
+
 	// Operation is the operation implemented by this operator.
 	Operation Operation `json:"operation" yaml:"operation"`
 
@@ -40,4 +44,5 @@ type Operator struct {
 	// Connections defines the path all data takes through this operator.
 	// It connects the child operators with each other and with this interface.
 	Connections Connections `json:"connections,omitempty" yaml:"connections,omitempty"`
+
 }

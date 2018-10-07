@@ -1,0 +1,21 @@
+operations:
+  delete:
+    reference: dbDelete
+  insert:
+    reference: dbInsert
+    generics:
+      item:
+        type: generic
+        generic: item
+  select:
+    reference: dbSelect
+    generics:
+      item:
+        type: generic
+        generic: item
+  update:
+    reference: dbUpdate
+    generics:
+      item:
+        type: generic
+        generic: item

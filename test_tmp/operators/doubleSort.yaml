@@ -1,0 +1,35 @@
+description: Double sort
+operation:
+  in:
+    type: stream
+    stream:
+      type: generic
+      generic: item
+  out:
+    type: map
+    map:
+      asc:
+        type: stream
+        stream:
+          type: generic
+          generic: item
+      desc:
+        type: stream
+        stream:
+          type: generic
+          generic: item
+operators:
+  sort1:
+    operators:
+      sort:
+        operation: sort
+    providers:
+      sort: mainSort
+  sort2:
+    operators:
+      sort:
+        operation: sort
+    providers:
+      sort: mainSort
+  sort:
+    operation: sort

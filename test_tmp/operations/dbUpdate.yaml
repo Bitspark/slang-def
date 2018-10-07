@@ -1,0 +1,10 @@
+in:
+  type: map
+  map:
+    id:
+      type: number
+    item:
+      type: generic
+      generic: item
+out:
+  type: boolean

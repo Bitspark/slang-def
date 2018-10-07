@@ -13,7 +13,7 @@ type testTypeProvider struct {
 	allowedTypes map[string]bool
 }
 
-func (t testTypeProvider) getReference(reference string) (Type, error) {
+func (t testTypeProvider) getTypeRef(reference string) (Type, error) {
 	to := Type{}
 
 	typeYAMLBytes, err := ioutil.ReadFile(filepath.Join("test_tmp", "types", reference+".yaml"))
@@ -21,15 +21,15 @@ func (t testTypeProvider) getReference(reference string) (Type, error) {
 	return to, err
 }
 
-func (t testTypeProvider) getType(reference string) (Type, error) {
-	if allowed, ok := t.allowedTypes[reference]; !allowed || !ok {
-		return Type{}, fmt.Errorf("bad type '%s'", reference)
+func (t testTypeProvider) getType(name string) (Type, error) {
+	if allowed, ok := t.allowedTypes[name]; !allowed || !ok {
+		return Type{}, fmt.Errorf("bad type '%s'", name)
 	}
 
-	return Type{Type: reference}, nil
+	return Type{Type: name}, nil
 }
 
-func createTestTypeProvider(allowedTypes []string) testTypeProvider {
+func createTestTypeProvider(allowedTypes []string) TypeProvider {
 	tp := testTypeProvider{}
 	tp.allowedTypes = make(map[string]bool)
 	for _, at := range allowedTypes {
@@ -43,18 +43,18 @@ func createTestTypeProvider(allowedTypes []string) testTypeProvider {
 type testOperationProvider struct {
 }
 
-func (t testOperationProvider) getOperation(reference string) (Operation, error) {
+func (t testOperationProvider) getOperationRef(reference string) (Operation, error) {
 	typeYAMLBytes, err := ioutil.ReadFile(filepath.Join("test_tmp", "operations", reference+".yaml"))
 
-	to := Operation{}
-	yaml.Unmarshal(typeYAMLBytes, &to)
+	operation := Operation{}
+	yaml.Unmarshal(typeYAMLBytes, &operation)
 
-	return to, err
+	return operation, err
 }
 
-func createTestOperationProvider() testOperationProvider {
-	op := testOperationProvider{}
-	return op
+func createTestOperationProvider() OperationProvider {
+	operation := testOperationProvider{}
+	return operation
 }
 
 // RESOURCE
@@ -62,13 +62,18 @@ func createTestOperationProvider() testOperationProvider {
 type testResourceProvider struct {
 }
 
-func (t testResourceProvider) get(reference string) (Resource, error) {
+func (t testResourceProvider) getResourceRef(reference string) (Resource, error) {
 	typeYAMLBytes, err := ioutil.ReadFile(filepath.Join("test_tmp", "resources", reference+".yaml"))
 
-	to := Resource{}
-	yaml.Unmarshal(typeYAMLBytes, &to)
+	resource := Resource{}
+	yaml.Unmarshal(typeYAMLBytes, &resource)
 
-	return to, err
+	return resource, err
+}
+
+func createTestResourceProvider() ResourceProvider {
+	rp := testResourceProvider{}
+	return rp
 }
 
 // OPERATOR
@@ -79,15 +84,29 @@ type testOperatorProvider struct {
 	builders map[string]builder
 }
 
-func (t testOperatorProvider) get(reference string, generics Generics, values Values, embedding Embedding) (Operator, error) {
+func (t testOperatorProvider) getOperatorRef(reference string) (Operator, error) {
+	typeYAMLBytes, err := ioutil.ReadFile(filepath.Join("test_tmp", "operators", reference+".yaml"))
+
+	operator := Operator{}
+	yaml.Unmarshal(typeYAMLBytes, &operator)
+
+	return operator, err
+}
+
+func (t testOperatorProvider) getOperator(reference string, generics Generics, values Values, embedding Embedding) (Operator, error) {
 	if builder, ok := t.builders[reference]; ok {
 		return builder(generics, values, embedding)
 	}
 
 	typeYAMLBytes, err := ioutil.ReadFile(filepath.Join("test_tmp", "operators", reference+".yaml"))
 
-	to := Operator{}
-	yaml.Unmarshal(typeYAMLBytes, &to)
+	operator := Operator{}
+	yaml.Unmarshal(typeYAMLBytes, &operator)
 
-	return to, err
+	return operator, err
+}
+
+func createTestOperatorProvider() OperatorProvider {
+	op := testOperatorProvider{}
+	return op
 }

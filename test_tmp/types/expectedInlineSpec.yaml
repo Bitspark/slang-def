@@ -1,0 +1,23 @@
+# The expected outcome after resolving inlineSpec.yaml
+description: A type using generics and specifying them immediately
+type: map
+map:
+  a:
+    type: string
+  b:
+    type: stream
+    stream:
+      type: string
+  c:
+    type: map
+    map:
+      a:
+        type: map
+        map:
+          a:
+            type: string
+          b:
+            type: number
+
+  d:
+    type: boolean

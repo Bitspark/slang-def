@@ -1,0 +1,6 @@
+type: reference
+reference: compare
+generics:
+  item:
+    type: reference
+    reference: user

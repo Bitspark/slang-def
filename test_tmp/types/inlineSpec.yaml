@@ -1,0 +1,21 @@
+description: A type using generics and specifying them immediately
+type: map
+map:
+  a:
+    type: generic
+    generic: type1
+  b:
+    type: stream
+    stream:
+      type: generic
+      generic: type1
+  c:
+    type: reference
+    reference: ref2
+    generics:
+      type2:
+        type: generic
+        generic: type2
+  d:
+    type: generic
+    generic: type3

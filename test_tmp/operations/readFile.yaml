@@ -1,0 +1,11 @@
+description: Read a file
+in:
+  description: Filename
+  type: string
+out:
+  type: map
+  map:
+    found:
+      type: boolean
+    content:
+      type: string

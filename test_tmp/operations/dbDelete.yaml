@@ -1,0 +1,4 @@
+in:
+  type: number
+out:
+  type: boolean

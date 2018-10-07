@@ -13,6 +13,18 @@ type Values map[string]interface{}
 
 // Type defines structure for data.
 type Type struct {
+
+	/* === REFERENCE + SPECIFICATION === */
+
+	// Reference is a placeholder for an arbitrary named type.
+	// It is ignored in case Type is not "reference".
+	Reference string `json:"reference,omitempty" yaml:"reference,omitempty"`
+
+	// Generics is a specification of the generics inside a type.
+	Generics Generics `json:"generics,omitempty" yaml:"generics,omitempty"`
+
+	/* === DEFINITION === */
+
 	// Description of this type in natural language (English).
 	Description string `json:"description" yaml:"description"`
 
@@ -32,13 +44,6 @@ type Type struct {
 	// It is ignored in case Type is not "generic".
 	Generic string `json:"generic,omitempty" yaml:"generic,omitempty"`
 
-	// Reference is a placeholder for an arbitrary named type.
-	// It is ignored in case Type is not "reference".
-	Reference string `json:"reference,omitempty" yaml:"reference,omitempty"`
-
-	// Generics is a specification of the generics inside a reference.
-	// It is ignored in case Type is not "reference".
-	Generics Generics `json:"generics,omitempty" yaml:"generics,omitempty"`
 }
 
 // Resolves the type using the given provider.
@@ -71,7 +76,7 @@ func (t Type) Resolve(typeProvider TypeProvider, generics Generics) (Type, error
 		}
 		resolved = *gen
 	} else if t.Type == "reference" {
-		ref, err := typeProvider.getReference(t.Reference)
+		ref, err := typeProvider.getTypeRef(t.Reference)
 		if err != nil {
 			return Type{}, err
 		}
@@ -83,7 +88,7 @@ func (t Type) Resolve(typeProvider TypeProvider, generics Generics) (Type, error
 			}
 			refGens[gen] = &resolvedGen
 		}
-		resolved, err = ref.Resolve(typeProvider, refGens)
+		resolved, err = ref.Resolve(typeProvider, t.Generics)
 		if err != nil {
 			return Type{}, err
 		}
