@@ -1,0 +1,19 @@
+description: System consisting of an HTTP server and handle
+implementation:
+  resources:
+    -
+      reference: HTTPServer
+      embedding:
+        request: httpHandler
+    -
+      reference: Filesystem
+      handles:
+        readFile:
+          - readFile
+  operators:
+    -
+      reference: local.httpHandler
+      handles:
+        - httpHandler
+      embedding:
+        readFile: readFile

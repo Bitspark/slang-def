@@ -20,16 +20,30 @@ operation:
           generic: item
 operators:
   sort1:
+    operation:
+      reference: sort
+        generics:
+          item:
+            type: generic
+            generic: item
     operators:
       sort:
-        operation: sort
-    providers:
-      sort: mainSort
+        operation:
+          reference: sort
+          generics:
+            item:
+              type: generic
+              generic: item
+    embedding:
+
   sort2:
     operators:
       sort:
-        operation: sort
-    providers:
-      sort: mainSort
+        operation:
+          reference: sort
+          generics:
+            item:
+              type: generic
+              generic: item
   sort:
     operation: sort

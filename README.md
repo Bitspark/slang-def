@@ -49,13 +49,28 @@ out:
 
 ### Resource
 
-A `resource` is a gateway to the outside world from a Slang perspective. Examples are filesystem, networking, databases, etc.
+A `resource` is a gateway to the outside world from a Slang perspective.
+It provides services that can be accessed in a Slang operator and events which are the entrance points for any data
+getting into Slang.
+
+Resources can be used to model different kinds of system resources and devices.
+
+Examples are:
+* Filesystem (see example)
+* Databases
+* IoT Devices
+* Networking
+* APIs
+
+Services and events are ordinary operations with two important exceptions:
+* Only events of resources can have a blank out-port
+* Only services of resources can have a blank in-port
 
 *Example*
 
 ```YAML
 description: Filesystem
-operations:
+services:
   readFile:
     description: Read a file
     in:
@@ -80,8 +95,92 @@ operations:
     out:
       description: Success
       type: boolean
+events:
+  fileWritten:
+    description: Fired when a file has been written.
+    in:
+      description: Filename
+      type: string
+    out:
+      type: trigger
 ```
 
 ### Operator
 
 An `operator` is an implementation of an `operation`.
+
+It can model a system or a subsystem from the most abstract perspective to the most detailed perspective.
+All such systems are built using either a top-down or a bottom-up approach or a mixture thereof.
+
+*Example*
+
+```YAML
+operation: {}  # We have no in or out ports, because this is a complete system
+description: A little IoT world
+resources:
+  iotSensor1:
+    resource:
+      events:
+        measuredTemperature:
+          in:
+            type: number
+    embedding:
+      measuredTemperature: measuredTemperature
+  iotActor1:
+    resource:
+      services:
+        adjustHeating:
+          out:
+            type: number
+operators:
+  measuredTemperature:
+    type: slang  # inline
+    operation:
+      in:
+        type: number
+    slang:  # inline
+      operation:
+        in:
+          type: number
+      resources:
+        iotActor1:
+          resource:
+            services:
+              adjustHeating:
+                out:
+                  type: number
+      operators:
+        adjustHeating:
+          type: resource
+          resource:
+            resource: iotActor1
+            service: adjustHeating
+          handles:
+            - adjustHeating
+        reactOnTemperature:
+          type: reference
+          reference: operator.defined.SomewhereElse
+          handles:
+            - reactOnTemperature
+      connections:
+        conn1:
+          from:
+            handle: main  # surrounding operator (measuredTemperature)
+            port: ''  # complete in-port
+          to:
+            handle: reactOnTemperature
+            port: ''  # complete in-port
+        conn2:
+          from:
+            handle: reactOnTemperature
+            port: ''
+          to:
+            handle adjustHeating
+            port: ''
+    specification:
+      embedding:
+        resourceMap:
+          iotActor1: iotActor1
+```
+
+In this example, two IoT devices are connected via Slang.

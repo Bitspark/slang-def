@@ -1,16 +1,14 @@
 package def
 
-type Properties map[string]*Type
-
 // An operation defines an interface and has a description of its semantics in natural language (English).
 type Operation struct {
 
 	/* === REFERENCE + SPECIFICATION === */
 
-	// Reference specifies a named operation.
+	// OperatorSpecification specifies a named operation.
 	Reference string `json:"reference,omitempty" yaml:"reference,omitempty"`
 
-	// Generics specify generics used in the operation referenced in Reference.
+	// Generics specify generics used in the operation referenced in OperatorSpecification.
 	Generics Generics `json:"generics,omitempty" yaml:"generics,omitempty"`
 
 	/* === DEFINITION === */

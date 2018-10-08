@@ -1,0 +1,11 @@
+
+implementation:
+  resources:
+    fs1:
+      reference: Filesystem
+  operators:
+    readFile:
+      operation: readFile
+      resource:
+        id: fs1
+        service: readFile

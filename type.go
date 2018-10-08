@@ -8,29 +8,25 @@ import (
 // Generics is a specification of generics.
 type Generics map[string]*Type
 
-// Values is a specification of properties.
-type Values map[string]interface{}
-
 // Type defines structure for data.
 type Type struct {
 
-	/* === REFERENCE + SPECIFICATION === */
+	// Type is either "stream", "map", "generic", "reference" or a type the target system understands.
+	// Normally, the following types should be available: "string", "number", "boolean", "trigger".
+	Type string `json:"type" yaml:"type"`
 
-	// Reference is a placeholder for an arbitrary named type.
-	// It is ignored in case Type is not "reference".
+	/* === REFERENCE + SPECIFICATION (only in case Type == "reference") === */
+
+	// Reference is the name of a referenced type.
 	Reference string `json:"reference,omitempty" yaml:"reference,omitempty"`
 
-	// Generics is a specification of the generics inside a type.
+	// Generics is a specification of the generics inside a referenced type.
 	Generics Generics `json:"generics,omitempty" yaml:"generics,omitempty"`
 
 	/* === DEFINITION === */
 
 	// Description of this type in natural language (English).
 	Description string `json:"description" yaml:"description"`
-
-	// Type is either "stream", "map", "generic", "reference" or a type the target system understands.
-	// Normally, the following types should be available: "string", "number", "boolean", "trigger".
-	Type string `json:"type" yaml:"type"`
 
 	// Stream is the underlying type for the stream.
 	// It is ignored in case Type is not "stream".
@@ -43,7 +39,6 @@ type Type struct {
 	// Generic is a placeholder for an arbitrary type.
 	// It is ignored in case Type is not "generic".
 	Generic string `json:"generic,omitempty" yaml:"generic,omitempty"`
-
 }
 
 // Resolves the type using the given provider.
