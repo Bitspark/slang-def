@@ -71,7 +71,7 @@ func (t Type) Resolve(typeProvider TypeProvider, generics Generics) (Type, error
 		}
 		resolved = *gen
 	} else if t.Type == "reference" {
-		ref, err := typeProvider.getTypeRef(t.Reference)
+		ref, err := typeProvider.dereferenceType(t.Reference)
 		if err != nil {
 			return Type{}, err
 		}
@@ -83,13 +83,13 @@ func (t Type) Resolve(typeProvider TypeProvider, generics Generics) (Type, error
 			}
 			refGens[gen] = &resolvedGen
 		}
-		resolved, err = ref.Resolve(typeProvider, t.Generics)
+		resolved, err = ref.Resolve(typeProvider, refGens)
 		if err != nil {
 			return Type{}, err
 		}
 	} else {
 		var err error
-		resolved, err = typeProvider.getType(t.Type)
+		resolved, err = typeProvider.buildType(t.Type)
 		if err != nil {
 			return Type{}, err
 		}

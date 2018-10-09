@@ -1,41 +1,20 @@
 package def
 
 // An operator is a net of instances defined by a set of instances and connections.
-type Operator struct {
-	// SPECIFICATION
-
-	// Type is either "reference", "slang", "native" or "resource".
-	Type OperatorType `json:"type" yaml:"type"`
-
-	// OperatorSpecification contains information to reference and specify an operator.
+type Instance struct {
+	// Specification contains information to specify an operator.
 	Specification OperatorSpecification `json:"specification,omitempty" yaml:"specification,omitempty"`
 
-	// IMPLEMENTATION
-
-	// Reference is a reference to the implementation of this operator.
-	Reference OperatorReference `json:"reference" yaml:"reference"`
-
-	// SlangOperator contains the actual implementation.
-	SlangOperator SlangOperator `json:"slang,omitempty" yaml:"implementation,omitempty"`
-
-	// SlangOperator contains the actual implementation.
-	NativeOperator NativeOperator `json:"native,omitempty" yaml:"implementation,omitempty"`
-
-	// SlangOperator contains the actual implementation.
-	ResourceOperator ResourceOperator `json:"resource,omitempty" yaml:"implementation,omitempty"`
-
-	// HANDLES
-
-	// Handles can be referenced in connections
-	Handles Handles `json:"handles" yaml:"handles"`
+	// Operator contains the actual implementation.
+	Operator Operator `json:"operator,omitempty" yaml:"operator,omitempty"`
 }
 
 type OperatorSpecification struct {
-	// Generics specifies the generics used in this operator.
-	Generics Generics `json:"generics,omitempty" yaml:"generics,omitempty"`
-
 	// Values specifies the properties used in this operator.
 	Values Values `json:"values,omitempty" yaml:"values,omitempty"`
+
+	// Generics specifies the generics used in this operator.
+	Generics Generics `json:"generics,omitempty" yaml:"generics,omitempty"`
 
 	// Embedding assigns an operator to each delegate.
 	Embedding Embedding `json:"embedding,omitempty" yaml:"embedding,omitempty"`
@@ -44,83 +23,86 @@ type OperatorSpecification struct {
 type OperatorType string
 type OperatorReference string
 
-type SlangOperator struct {
-	// Operation is the operation to be implemented by this operator.
-	Operation Operation `json:"operation" yaml:"operation"`
-
+type Operator struct {
 	// Description of this operator in natural language (English).
 	Description string `json:"description" yaml:"description"`
 
-	// Resources is the list of the resources this operator depends on.
-	Resources Resources `json:"resources,omitempty" yaml:"resources,omitempty"`
+	// Type is either "reference", "implementation" or "elementary".
+	Type OperatorType `json:"type" yaml:"type"`
+
+	// Reference to an operator.
+	Reference OperatorReference `json:"reference,omitempty" yaml:"reference,omitempty"`
 
 	// Properties is the definition for the structure of the values needed by this operator.
 	Properties Properties `json:"properties,omitempty" yaml:"properties,omitempty"`
 
-	// Operators is a map of all child operators inside this operator.
-	Operators Operators `json:"operators,omitempty" yaml:"operators,omitempty"`
+	// Services
+	Services map[ServiceName]*Operation `json:"services" yaml:"services"`
 
-	// Connections defines the path all data takes through this operator.
-	// It connects the child operators with each other and with this interface.
-	Connections Connections `json:"connections,omitempty" yaml:"connections,omitempty"`
+	// Delegate
+	Delegate bool `json:"delegate" yaml:"delegate"`
+
+	// Elementary
+	Elementary string `json:"elementary,omitempty" yaml:"elementary,omitempty"`
+
+	// In case Type == "implementation"
+
+	// Instances is a map of all child instances inside this operator.
+	Instances Instances `json:"operators,omitempty" yaml:"operators,omitempty"`
+
+	// Implementations
+	Implementations map[ServiceName]*struct {
+		// Handles can be referenced in connections.
+		// There can be an arbitrary number of handles for each service.
+		// The default service is called "main".
+		Handles Handles `json:"handles" yaml:"handles"`
+
+		// Connections defines the path all data takes through this operator.
+		// It connects the child operators with each other and with this interface.
+		Connections Connections `json:"connections,omitempty" yaml:"connections,omitempty"`
+	}
 }
 
 type NativeOperator struct {
 	Native string `json:"native" yaml:"native"`
 }
 
-type ResourceOperator struct {
-	Resource ResourceID `json:"resource" yaml:"resource"`
-
-	Service string `json:"service" yaml:"service"`
+type InstanceService struct {
+	Instance InstanceName `json:"instance" yaml:"instance"`
+	Service  ServiceName  `json:"service" yaml:"service"`
 }
 
-type Handles []HandleID
+type Handles map[HandleID]*InstanceService
 
 type Values map[string]interface{}
 
 // Embedding specifies how to embed a child operator into this implementation.
-type Embedding struct {
-	// OperatorMap maps an operator without implementation to an operator in this implementation.
-	OperatorMap OperatorMap `json:"operatorMap" yaml:"operatorMap"`
-
-	// ResourceMap maps resources in the operator to a resource in this implementation.
-	ResourceMap ResourceMap `json:"resourceMap" yaml:"resourceMap"`
-}
-
-type Resources map[ResourceID]*ResourceInstance
+type Embedding map[InstanceName]map[ServiceName]*InstanceService
 
 type Properties map[string]*Type
 
-type Operators map[OperatorID]*Operator
+type Instances map[InstanceName]*Instance
 
 type Connections map[ConnectionID]*struct {
-	From struct {
-		Handle HandleID
-		Port   InPortID
-	}
-
-	To struct {
-		Handle HandleID
-		Port   OutPortID
-	}
+	Source struct {
+		Handle HandleID `json:"handle" yaml:"handle"`
+		Port   InPortID `json:"port" yaml:"port"`
+	} `json:"source" yaml:"source"`
+	Destination struct {
+		Handle HandleID  `json:"handle" yaml:"handle"`
+		Port   OutPortID `json:"port" yaml:"port"`
+	} `json:"destination" yaml:"destination"`
 }
+
+type ServiceName string
+
+type DelegateName string
 
 type ResourceID string
 
 type HandleID string
 
-type OperatorMap map[OperatorID]OperatorID
-
-type ResourceMap map[ResourceID]ResourceID
-
-type ResourceInstance struct {
-	Resource string `json:"resource" yaml:"resource"`
-
-	Embedding OperatorMap `json:"embedding" yaml:"embedding"`
-}
-
-type OperatorID string
+type InstanceName string
 
 type ConnectionID string
 

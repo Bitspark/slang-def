@@ -9,7 +9,7 @@ func TestOperation_ProviderWorks(t *testing.T) {
 	a := assert.New(t)
 	op := createTestOperationProvider()
 
-	to, err := op.getOperationRef("compare")
+	to, err := op.dereferenceOperation("compare")
 	a.NoError(err)
 	a.Equal("map", to.In.Type)
 }
@@ -19,7 +19,7 @@ func TestOperation_ResolveType(t *testing.T) {
 	op := createTestOperationProvider()
 	tp := createTestTypeProvider([]string{"string", "boolean"})
 
-	to, err := op.getOperationRef("validateEmail")
+	to, err := op.dereferenceOperation("validateEmail")
 	a.NoError(err)
 
 	to, err = to.Resolve(op, tp, nil)

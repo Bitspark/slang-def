@@ -21,7 +21,6 @@ type Operation struct {
 
 	// Out is the definition of the structure of the data this operation returns
 	Out Type `json:"out,omitempty" yaml:"out,omitempty"`
-
 }
 
 // Resolves the type using the given provider.
@@ -31,7 +30,7 @@ func (o Operation) Resolve(operationProvider OperationProvider, typeProvider Typ
 
 	if o.Reference != "" {
 		var ref Operation
-		ref, err = operationProvider.getOperationRef(o.Reference)
+		ref, err = operationProvider.dereferenceOperation(o.Reference)
 		if err != nil {
 			return Operation{}, err
 		}

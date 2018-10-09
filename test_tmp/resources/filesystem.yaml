@@ -1,6 +1,0 @@
-description: 'Filesystem'
-operations:
-  readFile:
-    reference: readFile
-  writeFile:
-    reference: writeFile
