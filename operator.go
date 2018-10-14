@@ -5,9 +5,6 @@ type Instance struct {
 	// Delegate
 	Delegate bool `json:"delegate" yaml:"delegate"`
 
-	// Resource
-	Resource bool `json:"resource" yaml:"resource"`
-
 	// Specification contains information to specify an operator.
 	Specification OperatorSpecification `json:"specification,omitempty" yaml:"specification,omitempty"`
 
