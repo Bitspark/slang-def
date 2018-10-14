@@ -2,17 +2,14 @@ package def
 
 // An operator is a net of instances defined by a set of instances and connections.
 type Instance struct {
-	// Delegate
-	Delegate bool `json:"delegate" yaml:"delegate"`
-
-	// Specification contains information to specify an operator.
-	Specification OperatorSpecification `json:"specification,omitempty" yaml:"specification,omitempty"`
+	// Specification contains information to specify an instance.
+	Specification InstanceSpecification `json:"specification,omitempty" yaml:"specification,omitempty"`
 
 	// Operator contains the actual implementation.
 	Operator Operator `json:"operator,omitempty" yaml:"operator,omitempty"`
 }
 
-type OperatorSpecification struct {
+type InstanceSpecification struct {
 	// Values specifies the properties used in this operator.
 	Values Values `json:"values,omitempty" yaml:"values,omitempty"`
 
@@ -42,10 +39,10 @@ type Operator struct {
 	// Services
 	Services map[ServiceName]*Operation `json:"services" yaml:"services"`
 
+	// In case Type == "implementation"
+
 	// Delegates
 	Delegates Instances `json:"delegates,omitempty" yaml:"delegates,omitempty"`
-
-	// In case Type == "implementation"
 
 	// Instances is a map of all child instances inside this operator.
 	Instances Instances `json:"instances,omitempty" yaml:"instances,omitempty"`

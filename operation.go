@@ -5,10 +5,10 @@ type Operation struct {
 
 	/* === REFERENCE + SPECIFICATION === */
 
-	// OperatorSpecification specifies a named operation.
+	// InstanceSpecification specifies a named operation.
 	Reference string `json:"reference,omitempty" yaml:"reference,omitempty"`
 
-	// Generics specify generics used in the operation referenced in OperatorSpecification.
+	// Generics specify generics used in the operation referenced in InstanceSpecification.
 	Generics Generics `json:"generics,omitempty" yaml:"generics,omitempty"`
 
 	/* === DEFINITION === */
