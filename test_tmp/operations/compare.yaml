@@ -1,12 +1,11 @@
 description: 'Compares two items and returns a boolean indicating their relative order. True means that a comes before b.'
 in:
-  type: map
-  map:
-    a:
-      type: generic
-      generic: item
-    b:
-      type: generic
-      generic: item
+  a:
+    type: generic
+    generic: item
+  b:
+    type: generic
+    generic: item
 out:
-  type: boolean
+  order:
+    type: boolean

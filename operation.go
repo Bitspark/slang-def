@@ -17,10 +17,10 @@ type Operation struct {
 	Description string `json:"description,omitempty" yaml:"description,omitempty"`
 
 	// In is the definition of the structure of the data this operation accepts
-	In Type `json:"in,omitempty" yaml:"in,omitempty"`
+	In Map `json:"in,omitempty" yaml:"in,omitempty"`
 
 	// Out is the definition of the structure of the data this operation returns
-	Out Type `json:"out,omitempty" yaml:"out,omitempty"`
+	Out Map `json:"out,omitempty" yaml:"out,omitempty"`
 }
 
 // Resolves the type using the given provider.

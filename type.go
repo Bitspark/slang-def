@@ -5,12 +5,8 @@ import (
 	"fmt"
 )
 
-// Generics is a specification of generics.
-type Generics map[string]*Type
-
 // Type defines structure for data.
 type Type struct {
-
 	// Type is either "stream", "map", "generic", "reference" or a type the target system understands.
 	// Normally, the following types should be available: "string", "number", "boolean", "trigger".
 	Type string `json:"type" yaml:"type"`
@@ -34,12 +30,17 @@ type Type struct {
 
 	// Map is a map of underlying types.
 	// It is ignored in case Type is not "map".
-	Map map[string]*Type `json:"map,omitempty" yaml:"map,omitempty"`
+	Map Map `json:"map,omitempty" yaml:"map,omitempty"`
 
 	// Generic is a placeholder for an arbitrary type.
 	// It is ignored in case Type is not "generic".
 	Generic string `json:"generic,omitempty" yaml:"generic,omitempty"`
 }
+
+type Map map[string]*Type
+
+// Generics is a specification of generics.
+type Generics map[string]*Type
 
 // Resolves the type using the given provider.
 func (t Type) Resolve(typeProvider TypeProvider, generics Generics) (Type, error) {
@@ -96,6 +97,18 @@ func (t Type) Resolve(typeProvider TypeProvider, generics Generics) (Type, error
 	}
 
 	return resolved, nil
+}
+
+func (t Map) Resolve(typeProvider TypeProvider, generics Generics) (Map, error) {
+	newMap := make(Map)
+	for name, sub := range t {
+		newSub, err := sub.Resolve(typeProvider, generics)
+		if err != nil {
+			return nil, err
+		}
+		newMap[name] = &newSub
+	}
+	return newMap, nil
 }
 
 // Validate returns false iff the type uses unknown types or is malformed
