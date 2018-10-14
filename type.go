@@ -1,7 +1,6 @@
 package def
 
 import (
-	"errors"
 	"fmt"
 )
 
@@ -37,6 +36,7 @@ type Type struct {
 	Generic string `json:"generic,omitempty" yaml:"generic,omitempty"`
 }
 
+// Map
 type Map map[string]*Type
 
 // Generics is a specification of generics.
@@ -109,43 +109,4 @@ func (t Map) Resolve(typeProvider TypeProvider, generics Generics) (Map, error) 
 		newMap[name] = &newSub
 	}
 	return newMap, nil
-}
-
-// Validate returns false iff the type uses unknown types or is malformed
-func (t Type) Validate() error {
-	if t.Type == "stream" {
-		if t.Stream == nil {
-			return errors.New("stream not defined")
-		}
-		return t.Stream.Validate()
-	}
-
-	if t.Type == "map" {
-		if t.Map == nil {
-			return errors.New("map not defined")
-		}
-		for _, subtype := range t.Map {
-			err := subtype.Validate()
-			if err != nil {
-				return err
-			}
-		}
-		return nil
-	}
-
-	if t.Type == "generic" {
-		if t.Generic == "" {
-			return errors.New("generic not defined")
-		}
-		return nil
-	}
-
-	if t.Type == "reference" {
-		if t.Reference == "" {
-			return errors.New("reference not defined")
-		}
-		return nil
-	}
-
-	return nil
 }

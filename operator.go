@@ -48,7 +48,7 @@ type Operator struct {
 	// In case Type == "implementation"
 
 	// Instances is a map of all child instances inside this operator.
-	Instances Instances `json:"operators,omitempty" yaml:"operators,omitempty"`
+	Instances Instances `json:"instances,omitempty" yaml:"instances,omitempty"`
 
 	// Implementations
 	Implementations map[ServiceName]*struct {
@@ -61,10 +61,6 @@ type Operator struct {
 		// It connects the child operators with each other and with this interface.
 		Connections Connections `json:"connections,omitempty" yaml:"connections,omitempty"`
 	}
-}
-
-type NativeOperator struct {
-	Native string `json:"native" yaml:"native"`
 }
 
 type InstanceService struct {
