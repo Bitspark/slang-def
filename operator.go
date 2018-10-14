@@ -30,11 +30,11 @@ type Operator struct {
 	// Description of this operator in natural language (English).
 	Description string `json:"description" yaml:"description"`
 
-	// Type is either "reference", "implementation" or "elementary".
-	Type OperatorType `json:"type" yaml:"type"`
-
 	// Reference to an operator.
 	Reference OperatorReference `json:"reference,omitempty" yaml:"reference,omitempty"`
+
+	// Elementary
+	Elementary string `json:"elementary,omitempty" yaml:"elementary,omitempty"`
 
 	// Properties is the definition for the structure of the values needed by this operator.
 	Properties Properties `json:"properties,omitempty" yaml:"properties,omitempty"`
@@ -42,8 +42,8 @@ type Operator struct {
 	// Services
 	Services map[ServiceName]*Operation `json:"services" yaml:"services"`
 
-	// Elementary
-	Elementary string `json:"elementary,omitempty" yaml:"elementary,omitempty"`
+	// Delegates
+	Delegates Instances `json:"delegates,omitempty" yaml:"delegates,omitempty"`
 
 	// In case Type == "implementation"
 
@@ -51,7 +51,7 @@ type Operator struct {
 	Instances Instances `json:"instances,omitempty" yaml:"instances,omitempty"`
 
 	// Implementations
-	Implementations map[ServiceName]*struct {
+	Implementation map[ServiceName]*struct {
 		// Handles can be referenced in connections.
 		// There can be an arbitrary number of handles for each service.
 		// The default service is called "main".
@@ -60,10 +60,11 @@ type Operator struct {
 		// Connections defines the path all data takes through this operator.
 		// It connects the child operators with each other and with this interface.
 		Connections Connections `json:"connections,omitempty" yaml:"connections,omitempty"`
-	}
+	} `json:"implementation,omitempty" yaml:"implementation,omitempty"`
 }
 
 type InstanceService struct {
+	Delegate InstanceName `json:"delegate" yaml:"instance"`
 	Instance InstanceName `json:"instance" yaml:"instance"`
 	Service  ServiceName  `json:"service" yaml:"service"`
 }
